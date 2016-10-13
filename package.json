@@ -1,9 +1,14 @@
 {
-  "name": "dsb-template-lite",
+  "name": "dsb-typecheck",
   "version": "1.0.0",
-  "description": "A lighter template for building small javascript modules",
+  "description": "returns the real type of an object",
   "main": "index.js",
   "author": "Casey Dwayne",
+  "dependencies": {
+    "dsb-defined": "latest",
+    "dsb-to-string": "latest",
+    "dsb-rx": "1.0"
+  },
   "license": "None",
   "private": true
 }
