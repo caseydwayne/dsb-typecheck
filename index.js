@@ -25,20 +25,20 @@ module.exports = (function(DEBUG){
 /*---------------------------------------------------------------------*/
     
   
-  var typecheck = function(check, against, strict){ // advanced type-checking made easy
+  var typecheck = function( check, against, strict ){ // advanced type-checking made easy
     
     //setup
-    var c, a, s = true, u = 'undefined';
+    var c = check, a = against, s = true, u = 'undefined', undefined, z;
 
 /*---------------------------------------------------------------------*/
 
     var resolve = function(){
       
-      var _c = defined( check ), 
+      var _c = defined( check ), //root adaption handled later
           _a = defined( against ),
           _s = defined( strict );
       
-      if(DEBUG){
+      if( DEBUG > 3 ){
         console.log( { cd: _c, ad: _a, sd: _s } );
       }
       
@@ -53,9 +53,7 @@ module.exports = (function(DEBUG){
         }
       }
       //make sure something is there to check
-      if( _c  ){
-        //assign check
-        c = check;
+      if( _c ){ 
         //resolve against/strict
         if( _a ){
           //check for standard
@@ -66,18 +64,24 @@ module.exports = (function(DEBUG){
           //check for typecheck(soft)
           if( typeof against === 'boolean' ){
             s = against;
+            a = undefined;
             return "typecheck( check, strict )";
           }          
         }
         return "typecheck( check )";
-      }      
+      }
     };
     
     var signature = resolve();
+     
+/***********************************************************************/
 
-/*---------------------------------------------------------------------*/
-
-    //the business logic
+    //handle undefined {check}
+    if( typeof c === 'undefined' ){      
+      return defined(a) 
+        ? ( a === u ) //there can only be 1 correct answer for {a} (undefined, 'undefined')
+        : u; //return 'undefined' as type if no {against} provided
+    }
     
     //setup
     var t, m, r, f;
@@ -89,7 +93,9 @@ module.exports = (function(DEBUG){
     if( !s ) try { t = c.toString(); } catch (e){};
     
     //return undefined if {check} is root object
-    if( t === toString(root) ){      
+    //v1.2: removed to allow real item type (global|window|other)
+    if( false && t === toString(root) ){
+      if( DEBUG ) console.log('returning global object',t,'as',u);
       return a ? a === u : u;
     }
     
@@ -104,7 +110,7 @@ module.exports = (function(DEBUG){
     
 /*---------------------------------------------------------------------*/
 
-    if( DEBUG ){
+    if( DEBUG > 2 ){
       console.log('\n-----------------------');
       
       console.log('Calling '+signature );
@@ -126,4 +132,4 @@ module.exports = (function(DEBUG){
   return typecheck;
 
 /*---------------------------------------------------------------------*/
-}(false));
+}(1));
