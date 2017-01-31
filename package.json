@@ -1,13 +1,17 @@
 {
   "name": "dsb-typecheck",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "returns the real type of an object",
   "main": "index.js",
   "author": "Casey Dwayne",
   "dependencies": {
-    "dsb-defined": "latest",
-    "dsb-to-string": "latest",
-    "dsb-rx": "1.0"
+    "dsb-defined": "1.0",
+    "dsb-to-string": "1.0",
+    "dsb-rx": "1.0",
+    "dsb-lowercase": "1.0"
+  },
+  "devDependencies": {
+    "dsb-debug-mini": "latest"
   },
   "license": "None",
   "private": true

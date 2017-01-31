@@ -2,33 +2,32 @@ module.exports = (function(DEBUG){
 /*---------------------------------------------------------------------*/
 
   //setup the vitals
-  
-  var root = this;
   var defined = require('dsb-defined');
   var toString = require('dsb-to-string');  
   var rx = require('dsb-rx/objectType');
+  //var lowercase = require('dsb-lowercase');
   var lowercase = function(v){
     return String.prototype.toLowerCase.call( v );
-  };  
+  };
   
 /***********************************************************************/
 
-  /* @method typecheck
-   * returns the real type of an object
+  /* 
+   * @method typecheck
+   * advanced type-checking made easy (or returns the real type of an object)
    * @param check {any} object to check
    * @param [against] {string} string to check type against (via contains())
    * @param [strict] {boolean} if false, will do a shallow typecheck (may not be true type, but useful for some scenarios)
-   * @return truetype {string} i.e., object, array, regexp, ...
-   * @native supported
+   * @return truetype {string} i.e., object, array, regexp, ...   
    */
   
 /*---------------------------------------------------------------------*/
     
   
-  var typecheck = function( check, against, strict ){ // advanced type-checking made easy
+  var typecheck = function( check, against, strict ){
     
     //setup
-    var c = check, a = against, s = true, u = 'undefined', undefined, z;
+    var c = check, a = against, s = true, u = 'undefined', undefined;
 
 /*---------------------------------------------------------------------*/
 
@@ -40,10 +39,9 @@ module.exports = (function(DEBUG){
       
       if( DEBUG > 3 ){
         console.log( { cd: _c, ad: _a, sd: _s } );
-      }
+      }      
       
-      
-      //check for full
+      //check for full signature
       if( _s ){
         if( typeof strict === 'boolean' ){
           c = check;
@@ -52,6 +50,7 @@ module.exports = (function(DEBUG){
           return "typecheck( check, against, strict )";
         }
       }
+      
       //make sure something is there to check
       if( _c ){ 
         //resolve against/strict
@@ -92,30 +91,24 @@ module.exports = (function(DEBUG){
     //if not strict, try to do a soft {toString} conversion
     if( !s ) try { t = c.toString(); } catch (e){};
     
-    //return undefined if {check} is root object
-    //v1.2: removed to allow real item type (global|window|other)
-    if( false && t === toString(root) ){
-      if( DEBUG ) console.log('returning global object',t,'as',u);
-      return a ? a === u : u;
-    }
-    
     //attempt to match
     m = t.match( rx );
     
     //register match or set {r} as type string
     r = m && m.length > 1 ? lowercase( m[1] ) : t;    
-    //console.log(r);
+    
     //if against is a string, check against check's {r}
     f = (typeof a === 'string') ? r.indexOf( lowercase( a ) ) >-1 : r;    
-    
+   
 /*---------------------------------------------------------------------*/
 
     if( DEBUG > 2 ){
-      console.log('\n-----------------------');
-      
+      console.log('\n-----------------------');      
       console.log('Calling '+signature );
       var to = { check: c, against: a, strict: s, returning: f };
-      console.log( require('dsb-printr')( to ) );
+      //printr is probably headed for open-source, but not declared yet
+      //console.log( require('dsb-printr')( to ) );
+      console.log(to);
       console.log('-----------------------\n');
     }
     
@@ -132,4 +125,4 @@ module.exports = (function(DEBUG){
   return typecheck;
 
 /*---------------------------------------------------------------------*/
-}(1));
+}(0));

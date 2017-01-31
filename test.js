@@ -2,23 +2,21 @@ module.exports = (function(){
 /*---------------------------------------------------------------------*/
   
   var typecheck = require('./index'),
-          debug = require('dsb-debugger').create('typecheck'),
-           each = require('dsb-each');
-  
-  
-  var obj = {
-    aval: 'value',
-    typecheck: typecheck
-  };
-
+          debug = require('dsb-debug-mini').create('typecheck'),
+             __ = {
+               each: require('dsb-each'),
+               root: require('dsb-root'),
+               env: require('dsb-env'),
+               presets: require('dsb-debug-presets')
+             };
+             
 /***********************************************************************/
   
   debug.method( 'typecheck', function( fn, test, name ){
 
 /*---------------------------------------------------------------------*/
 
-    var p = debug.presets,
-//        p = { object: { my: 'obj' } },
+    var p = __.presets,
         u = 'undefined',
        _u,
 
@@ -26,58 +24,38 @@ module.exports = (function(){
 
         // type = string of what it should return
         // value = item to check against
-        // callit = boolean to also test as 'this' method
-        t = function(type, value, callit){
+        t = function( type, value ){
           
-          var c = callit !== void 0 ? callit : true;
+          var arr = (type === 'array');
           
           //standard tests (should return type as string)
-          var t = fn( value );
-          test( type, t, type );
+          var a = arr ? [value] : value;
+          test( type, a, type );
           
-          //check against valid type (should return Boolean:true)
-          var t2 = fn( value, type );
-          test( type+' against '+type, t2, true );
+          //check against valid type (should return Boolean:true)                    
+          test( type+' against '+type, [value, type], true );
           
-          //check undefined against valid type (should return Boolean:false)
-          var t2 = fn( _u, type );
-          test( u+' against '+type, t2, false );
+          //check undefined against valid type (should return Boolean:false)          
+          test( u+' against '+type, [ _u, type ], false );
           
-          //run inside another object to ensure no 'this' conflict 
-          //var ti = obj[name]( value ); test( type+'(in object)', ti, type );
-          
-          //if call boolean is set, attempt as native
-          if( c ){
-            var ok;
-            try {
-              ok = fn.call( value, type );
-            }
-            catch(error){
-              debug.log( 'Native support is unavailable on '+name );
-            }
-            //console.log('ok returning ',ok);
-            //if( ok ) test( type+' *call', ok, true );
-          }
         };
 
 /*---------------------------------------------------------------------*/
 
     //test each type of preset against each other
-    each( p, function( v, k ){ t( k, v ); } );
+    __.each( p, function( v, k ){ t( k, v ); } );
 
 /*---------------------------------------------------------------------*/
 
     //test undefined
-    test( 'undefined', fn( _u ), u );
-    test( 'undefined(against)', fn( _u, u ), true );
+    test( 'undefined', _u, u );
+    test( 'undefined(against)', [ _u, u ], true );
     
 /*---------------------------------------------------------------------*/
-
+   
     //test root
-    var root = require('dsb-root'),
-         env = require('dsb-env');
-         
-    test( 'root', fn( root ), ( env === 'node' ? 'global' : 'window' ) );
+    var e = ( __.env === 'node' ? 'global' : 'window' );
+    test( 'root', __.root, e  );
     
 /*---------------------------------------------------------------------*/
     
@@ -85,11 +63,7 @@ module.exports = (function(){
   
  /***********************************************************************/
  
-  debug.complete();
-
-/*---------------------------------------------------------------------*/
+  return debug.complete();
   
-  return debug;
-
 /*---------------------------------------------------------------------*/  
-}());
+}(0));
