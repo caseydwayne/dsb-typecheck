@@ -1,16 +1,23 @@
 module.exports = (function(DEBUG){
-/*---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 
   //setup the vitals
   var defined = require('dsb-defined');
-  var toString = require('dsb-to-string');  
-  var rx = require('dsb-rx/objectType');
-  //var lowercase = require('dsb-lowercase');
-  var lowercase = function(v){
-    return String.prototype.toLowerCase.call( v );
-  };
+  var toString = require('dsb-to-string');   
   
-/***********************************************************************/
+  var rx, lowercase;
+  
+  if( true || typeof dsb === 'object' ) {
+    rx = require('dsb-rx/objectType');
+    lowercase = require('dsb-lowercase');
+  } else {
+    rx = /\[\w+ (.*)\]/;
+    lowercase = function(v){
+      return String.prototype.toLowerCase.call( v );
+    };
+  }
+  
+/******************************************************************************/
 
   /* 
    * @method typecheck
@@ -21,7 +28,7 @@ module.exports = (function(DEBUG){
    * @return truetype {string} i.e., object, array, regexp, ...   
    */
   
-/*---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
     
   
   var typecheck = function( check, against, strict ){
@@ -29,7 +36,7 @@ module.exports = (function(DEBUG){
     //setup
     var c = check, a = against, s = true, u = 'undefined', undefined;
 
-/*---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 
     var resolve = function(){
       
@@ -73,7 +80,7 @@ module.exports = (function(DEBUG){
     
     var signature = resolve();
      
-/***********************************************************************/
+/******************************************************************************/
 
     //handle undefined {check}
     if( typeof c === 'undefined' ){      
@@ -100,29 +107,29 @@ module.exports = (function(DEBUG){
     //if against is a string, check against check's {r}
     f = (typeof a === 'string') ? r.indexOf( lowercase( a ) ) >-1 : r;    
    
-/*---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 
     if( DEBUG > 2 ){
       console.log('\n-----------------------');      
-      console.log('Calling '+signature );
-      var to = { check: c, against: a, strict: s, returning: f };
+      console.log('Calling '+signature );      
+      var to = { check: toString(c), against: a, strict: s, returning: f };
       //printr is probably headed for open-source, but not declared yet
       //console.log( require('dsb-printr')( to ) );
       console.log(to);
       console.log('-----------------------\n');
     }
     
-/*---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 
     return f;
 
-/*---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
     
   };//end typecheck
   
-/***********************************************************************/  
+/******************************************************************************/ 
 
   return typecheck;
 
-/*---------------------------------------------------------------------*/
-}(0));
+/*----------------------------------------------------------------------------*/
+}(2));
