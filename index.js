@@ -32,7 +32,7 @@ module.exports = (function(DEBUG){
     
   
   var typecheck = function( check, against, strict ){
-    
+      
     //setup
     var c = check, a = against, s = true, u = 'undefined', undefined;
 
@@ -105,9 +105,9 @@ module.exports = (function(DEBUG){
     r = m && m.length > 1 ? lowercase( m[1] ) : t;    
     
     //if against is a string, check against check's {r}
-    f = (typeof a === 'string') ? r.indexOf( lowercase( a ) ) >-1 : r;    
-   
-/*----------------------------------------------------------------------------*/
+    f = (typeof a === 'string') ? r.indexOf( lowercase( a ) ) >-1 : r;        
+    
+/*--------------------------------------------------------------------------ffffff-*/
 
     if( DEBUG > 2 ){
       console.log('\n-----------------------');      
@@ -132,4 +132,4 @@ module.exports = (function(DEBUG){
   return typecheck;
 
 /*----------------------------------------------------------------------------*/
-}(2));
+}(0));

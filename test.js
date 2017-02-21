@@ -1,8 +1,8 @@
-module.exports = (function(){
+module.exports = (function(DEBUG){
 /*----------------------------------------------------------------------------*/
   
   var typecheck = require('./index'),
-          debug = require('dsb-debug').create('typecheck'),
+          debug = require('dsb-debug-mini').create('typecheck'),
              __ = {
                each: require('dsb-each'),
                root: require('dsb-root'),
@@ -26,14 +26,21 @@ module.exports = (function(){
         // value = item to check against
         t = function( type, value ){
           
-          var arr = (type === 'array');
+          if( DEBUG > 1 ) console.log( 'checking', type, 'against', value );
+          
+          var arr = ( type === 'array' );
+                    
+          var a = arr ? [value] : value;
+          
+          if( DEBUG ) console.log( 'checking if', a, 'is', type );          
+          
+          if( DEBUG > 3 ) return;
           
           //standard tests (should return type as string)
-          var a = arr ? [value] : value;
-          test( type, a, type );
+          test( type, [a], type );
           
           //check against valid type (should return Boolean:true)                    
-          test( type+' against '+type, [value, type], true );
+          test( type+' against '+type, [ value, type ], true );
           
           //check undefined against valid type (should return Boolean:false)          
           test( u+' against '+type, [ _u, type ], false );
@@ -44,7 +51,7 @@ module.exports = (function(){
 
     //test each type of preset against each other
     __.each( p, function( v, k ){ t( k, v ); } );
-
+    
 /*----------------------------------------------------------------------------*/
 
     //test undefined
