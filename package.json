@@ -4,6 +4,10 @@
   "description": "returns the real type of an object",
   "main": "index.js",
   "author": "Casey Dwayne <opensource@caseydwayne.com> (https://caseydwayne.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caseydwayne/dsb-typecheck.git"
+  },
   "dependencies": {
     "dsb-defined": "1.0.0",
     "dsb-to-string": "1.0.0"
@@ -14,5 +18,5 @@
     "dsb-env": "1.0.0"
   },
   "license": "NONE",
-  "private": true
+  "private": false
 }
